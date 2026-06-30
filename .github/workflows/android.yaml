@@ -17,20 +17,20 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-size: '3.11'
+        python-version: '3.11'
 
-    - name: Install Buildozer and Dependencies
+    - name: Install System Dependencies
       run: |
         sudo apt-get update
         sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
-        pip3 install --user --upgrade buildozer cython virtualenv
+        pip3 install --user --upgrade pip
+        pip3 install --user --upgrade buildozer "cython<3.0.0" virtualenv
 
-    - name: Build with Buildozer
+    - name: Build Android APK
       run: |
         export PATH=$PATH:$HOME/.local/bin
-        yes | buildozer android debug
+        buildozer android debug
       env:
-        # Kana gochuun akka ijaarsi kee Google Play dambii haaraa hordofu taasisa
         GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
     - name: Upload APK Artifact
