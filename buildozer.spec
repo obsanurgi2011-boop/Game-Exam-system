@@ -1,3 +1,4 @@
+
 [app]
 title = Go Exam
 package.name = goexam
