@@ -1,16 +1,5 @@
-[app]
-title = Go Exam
-package.name = goexam
-package.domain = org.exam
+# Reportlab fi Kivy dabalatee python3 gargaaramuu qaba
+requirements = python3, kivy, reportlab
 
-source.dir = .
-source.include_exts = py,kv,png,jpg,json
-
-version = 1.0
-
-requirements = python3,kivy
-
-orientation = portrait
-
-[android]
-permissions = INTERNET
+# Faayiloota (.json) dabalatee extensions hunda akka dabalatu gochuuf
+source.include_exts = py, png, jpg, kv, atlas, json
