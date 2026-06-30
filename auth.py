@@ -1,42 +1,44 @@
-import json, os, hashlib
+import hashlib
+import os
+import json
 
 class UserAuth:
     def __init__(self):
-        self.file = "data/users.json"
-        os.makedirs("data", exist_ok=True)
-
-        if not os.path.exists(self.file):
-            self.users = [{
-                "username": "admin",
-                "password": self.hash("admin"),
-                "role": "admin"
-            }]
-            self.save()
-        else:
-            self.users = json.load(open(self.file))
-
+        self.users_file = 'users.json'
         self.current_user = None
+        self.load_users()
 
-    def save(self):
-        json.dump(self.users, open(self.file, "w"))
+    def load_users(self):
+        if os.path.exists(self.users_file):
+            with open(self.users_file, 'r', encoding='utf-8') as f:
+                try:
+                    self.users = json.load(f)
+                except:
+                    self.reset_admin()
+        else:
+            self.reset_admin()
 
-    def hash(self, p):
-        return hashlib.sha256(p.encode()).hexdigest()
+    def reset_admin(self):
+        self.users = [{'username': 'admin', 'password': hashlib.sha256('admin'.encode()).hexdigest(), 'role': 'admin'}]
+        self.save_users()
 
-    def login(self, u, p):
-        for x in self.users:
-            if x["username"] == u and x["password"] == self.hash(p):
-                self.current_user = x
+    def save_users(self):
+        with open(self.users_file, 'w', encoding='utf-8') as f:
+            json.dump(self.users, f, indent=4)
+
+    def authenticate(self, username, password):
+        hashed = hashlib.sha256(password.encode()).hexdigest()
+        for user in self.users:
+            if user['username'] == username and user['password'] == hashed:
+                self.current_user = user
                 return True
         return False
 
-    def add_user(self, u, p, role="student"):
-        if any(x["username"] == u for x in self.users):
+    def add_user(self, username, password, role):
+        if any(u['username'] == username for u in self.users):
             return False
-        self.users.append({
-            "username": u,
-            "password": self.hash(p),
-            "role": role
-        })
-        self.save()
+        hashed = hashlib.sha256(password.encode()).hexdigest()
+        self.users.append({'username': username, 'password': hashed, 'role': role})
+        self.save_users()
         return True
+        
