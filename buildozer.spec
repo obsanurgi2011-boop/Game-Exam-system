@@ -6,7 +6,7 @@ source.dir = .
 source.include_exts = py, png, jpg, kv, atlas, json
 
 version = 0.1
-requirements = python3, kivy==2.3.0, reportlab, hostpython3
+requirements = python3, kivy==2.3.0, reportlab, hostpython3, libffi
 
 orientation = portrait
 fullscreen = 0
@@ -20,7 +20,7 @@ android.private_storage = True
 android.accept_sdk_license = True
 android.enable_androidx = True
 
-# Permissions if needed
+# Permissions
 android.permissions = INTERNET, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE
 
 [buildozer]
