@@ -8,13 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repo
+    - name: Checkout
       uses: actions/checkout@v4
-
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
 
     - name: Install dependencies
       run: |
@@ -25,6 +20,28 @@ jobs:
 
         pip install --upgrade pip
         pip install buildozer cython==0.29.36
+
+    - name: Install Android SDK (FIX AIDL ERROR)
+      run: |
+        mkdir -p $HOME/android-sdk
+        cd $HOME/android-sdk
+
+        wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O tools.zip
+        unzip tools.zip -d cmdline-tools
+        mv cmdline-tools cmdline-tools/latest
+
+        yes | $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager --licenses
+
+        $HOME/android-sdk/cmdline-tools/latest/bin/sdkmanager \
+        "platform-tools" \
+        "platforms;android-33" \
+        "build-tools;33.0.2"
+
+    - name: Set ENV
+      run: |
+        echo "ANDROIDSDK=$HOME/android-sdk" >> $GITHUB_ENV
+        echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+        echo "PATH=$PATH:$HOME/android-sdk/platform-tools" >> $GITHUB_ENV
 
     - name: Build APK
       run: |
