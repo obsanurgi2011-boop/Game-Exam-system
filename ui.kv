@@ -1,60 +1,30 @@
-<LoginScreen>:
+#:kivy 2.3.0
+
+<MainScreen>:
     BoxLayout:
-        orientation: "vertical"
+        orientation: 'vertical'
         padding: 20
-        spacing: 10
-
-        Label:
-            text: "GO EXAM"
-            font_size: 32
-
-        TextInput:
-            id: user
-            hint_text: "Username"
-
-        TextInput:
-            id: pwd
-            hint_text: "Password"
-            password: True
-
+        spacing: 20
         Button:
-            text: "LOGIN"
-            on_press: root.login()
-
-
-<DashboardScreen>:
-    BoxLayout:
-        orientation: "vertical"
-
-        Label:
-            text: "Dashboard"
-
-        Button:
-            text: "Start Exam"
-            on_press: root.start_exam()
-
+            text: 'Start Exam'
+            font_size: 24
+            on_press: root.goto_exam()
 
 <ExamScreen>:
     BoxLayout:
-        orientation: "vertical"
+        orientation: 'vertical'
         padding: 20
-
+        spacing: 20
         Label:
-            id: question
-            text: ""
-
+            id: question_label
+            text: ''
+            font_size: 20
+            size_hint_y: 0.2
+        BoxLayout:
+            id: options_box
+            orientation: 'vertical'
+            size_hint_y: 0.6
         Button:
-            id: opt0
-            on_press: root.select(0)
-
-        Button:
-            id: opt1
-            on_press: root.select(1)
-
-        Button:
-            id: opt2
-            on_press: root.select(2)
-
-        Button:
-            id: opt3
-            on_press: root.select(3)
+            text: 'Next'
+            size_hint_y: 0.2
+            on_press: root.next_question()
