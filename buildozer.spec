@@ -1,15 +1,28 @@
 [app]
-title = Go Exam
-package.name = goexam
-package.domain = org.exam
+
+title = ExamSystem
+package.name = examsystem
+package.domain = org.example
 
 source.dir = .
-source.include_exts = py,kv,png,jpg,json
-source.include_exts = py,png,jpg,kv,atlas
+source.include_exts = py,png,jpg,kv,atlas,json
+
 version = 1.0
 
 requirements = python3,kivy,reportlab
+
 orientation = portrait
 
-[android]
-permissions = INTERNET
+fullscreen = 0
+
+android.permissions = INTERNET
+
+# (Important stable settings)
+android.api = 33
+android.minapi = 21
+android.ndk = 25b
+
+[buildozer]
+
+log_level = 2
+warn_on_root = 1
