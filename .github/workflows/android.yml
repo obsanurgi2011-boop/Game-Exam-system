@@ -1,53 +1,22 @@
-name: Build APK
+- name: Install Android SDK
+  run: |
+    export ANDROID_HOME=$HOME/android-sdk
+    mkdir -p $ANDROID_HOME/cmdline-tools
+    cd $ANDROID_HOME
 
-on:
-  workflow_dispatch:
+    wget -O cmdline-tools.zip https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
 
-jobs:
-  build:
-    runs-on: ubuntu-22.04   # ✅ FIXED (DO NOT use 24.04)
+    unzip -q cmdline-tools.zip -d temp
 
-    steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
+    mv temp/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
 
-    - name: Install system dependencies
-      run: |
-        sudo apt update
-        sudo apt install -y git zip unzip openjdk-17-jdk \
-        autoconf automake libtool pkg-config \
-        build-essential ccache wget python3-pip
+    yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
 
-        pip3 install --upgrade pip
-        pip3 install buildozer cython==0.29.36
+    $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
+      "platform-tools" \
+      "platforms;android-33" \
+      "build-tools;33.0.2"
 
-    - name: Install Android SDK (FIX AIDL)
-      run: |
-        export ANDROID_HOME=$HOME/android-sdk
-        mkdir -p $ANDROID_HOME
-        cd $ANDROID_HOME
-
-        wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip -O tools.zip
-        unzip tools.zip -d cmdline-tools
-        mv cmdline-tools cmdline-tools/latest
-
-        yes | cmdline-tools/latest/bin/sdkmanager --licenses
-
-        cmdline-tools/latest/bin/sdkmanager \
-        "platform-tools" \
-        "platforms;android-33" \
-        "build-tools;33.0.2"
-
-        echo "ANDROIDSDK=$ANDROID_HOME" >> $GITHUB_ENV
-        echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
-        echo "PATH=$PATH:$ANDROID_HOME/platform-tools" >> $GITHUB_ENV
-
-    - name: Build APK
-      run: |
-        buildozer -v android debug
-
-    - name: Upload APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: apk
-        path: bin/*.apk
+    echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
+    echo "$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
+    echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> $GITHUB_PATH
