@@ -1,4 +1,4 @@
-name: Build APK FIX
+name: Android APK Build (FINAL FIX)
 
 on:
   workflow_dispatch:
@@ -17,37 +17,41 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Install basic tools
+      - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y wget unzip
 
-      - name: Download Android command line tools
+      - name: Setup Android SDK correctly
         run: |
-          mkdir -p $HOME/android-sdk/cmdline-tools
-          cd $HOME/android-sdk
+          export ANDROID_SDK_ROOT=$HOME/android-sdk
+          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
+
+          cd $HOME
 
           wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
-          unzip commandlinetools-linux-*.zip -d cmdline-tools
 
-          mv cmdline-tools/cmdline-tools cmdline-tools/latest
+          unzip commandlinetools-linux-*.zip -d $ANDROID_SDK_ROOT/cmdline-tools
 
-          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
-          echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
-          echo "$HOME/android-sdk/platform-tools" >> $GITHUB_PATH
+          mv $ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools $ANDROID_SDK_ROOT/cmdline-tools/latest
+
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          echo "$ANDROID_SDK_ROOT/platform-tools" >> $GITHUB_PATH
+
+      - name: Verify sdkmanager
+        run: sdkmanager --version
 
       - name: Accept licenses
         run: yes | sdkmanager --licenses || true
 
-      - name: Install SDK packages (FIXED VERSION)
+      - name: Install SDK components (SAFE VERSION)
         run: |
-          sdkmanager --sdk_root=$HOME/android-sdk \
-            "platform-tools" \
-            "platforms;android-34" \
-            "build-tools;34.0.0" \
-            "cmdline-tools;latest"
+          sdkmanager "platform-tools" \
+                     "platforms;android-33" \
+                     "build-tools;33.0.2"
 
-      - name: Grant permission
+      - name: Make gradlew executable
         run: chmod +x gradlew
 
       - name: Clean project
@@ -59,5 +63,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
+          name: APK
           path: app/build/outputs/apk/debug/*.apk
