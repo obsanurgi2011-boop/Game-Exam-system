@@ -1,4 +1,4 @@
-name: Build Kivy APK
+name: Kivy APK Build
 
 on:
   workflow_dispatch:
@@ -16,7 +16,7 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install system dependencies
+      - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -31,7 +31,7 @@ jobs:
           pip install --upgrade pip
           pip install buildozer cython
 
-      - name: Build APK (NO INIT!)
+      - name: Build APK ONLY
         run: buildozer -v android debug
 
       - name: Upload APK
