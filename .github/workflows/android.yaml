@@ -1,4 +1,4 @@
-name: Build APK (FIXED)
+name: Build APK FIX
 
 on:
   workflow_dispatch:
@@ -17,22 +17,40 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+      - name: Install basic tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget unzip
+
+      - name: Download Android command line tools
+        run: |
+          mkdir -p $HOME/android-sdk/cmdline-tools
+          cd $HOME/android-sdk
+
+          wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+          unzip commandlinetools-linux-*.zip -d cmdline-tools
+
+          mv cmdline-tools/cmdline-tools cmdline-tools/latest
+
+          echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+          echo "$HOME/android-sdk/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          echo "$HOME/android-sdk/platform-tools" >> $GITHUB_PATH
 
       - name: Accept licenses
-        run: yes | sdkmanager --licenses
+        run: yes | sdkmanager --licenses || true
 
-      - name: Install required SDK tools
+      - name: Install SDK packages (FIXED VERSION)
         run: |
-          sdkmanager "platform-tools" \
-                     "platforms;android-34" \
-                     "build-tools;34.0.0"
+          sdkmanager --sdk_root=$HOME/android-sdk \
+            "platform-tools" \
+            "platforms;android-34" \
+            "build-tools;34.0.0" \
+            "cmdline-tools;latest"
 
-      - name: Grant permission to gradlew
+      - name: Grant permission
         run: chmod +x gradlew
 
-      - name: Clean build
+      - name: Clean project
         run: ./gradlew clean
 
       - name: Build APK
@@ -41,5 +59,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: APK
+          name: app-debug
           path: app/build/outputs/apk/debug/*.apk
