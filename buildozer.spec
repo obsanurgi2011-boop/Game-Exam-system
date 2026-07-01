@@ -1,27 +1,54 @@
 [app]
-title = Game Exam App
-package.name = gameexamapp
-package.domain = com.obsanurgi
+# App name
+title = MyApp
+
+# Package name, used as the app's identifier
+package.name = myapp
+package.domain = org.test
+
+# Source code directory
 source.dir = .
-source.include_exts = py,png,jpg,kv,atlas,json
 
-version = 0.1
-requirements = python3, kivy==2.3.0, reportlab, libffi
+# Source files
+source.include_exts = py,png,jpg,kv,atlas
+
+# Requirements (libraries needed)
+requirements = python3,kivy,reportlab,libffi
+
+# Entry point of the app
+entrypoint = main.py
+
+# Icon
+icon.filename = icon.png
+
+# Orientation
 orientation = portrait
-fullscreen = 0
-
-# Android specific
-android.api = 34
-android.minapi = 21
-android.sdk = 34
-android.ndk_api = 21
-android.private_storage = True
-android.accept_sdk_license = True
-android.enable_androidx = True
 
 # Permissions
-android.permissions = INTERNET, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE
+android.permissions = INTERNET,WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE
 
-[buildozer]
-log_level = 2
-warn_on_root = 1
+# Version code and version name
+version.code = 1
+version.name = 1.0.0
+
+# Presplash (splash screen) - optional
+# presplash.filename = presplash.png
+
+# Splash screen timeout
+# presplash.duration = 3
+
+# Android API level
+android.api = 33
+
+# Android SDK version
+android.sdk = 33
+
+# Android NDK version
+android.ndk = 23b
+
+# Build mode
+# 'debug' or 'release'
+android.debug = 1
+
+# Extra options
+# (Add any extra build options here)
