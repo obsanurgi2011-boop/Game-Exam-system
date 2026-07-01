@@ -1,24 +1,21 @@
 [app]
-
 title = ExamSystem
 package.name = examsystem
 package.domain = org.example
 
 source.dir = .
-source.include_exts = py,png,jpg,kv,atlas,json
+source.include_exts = py,png,jpg,kv
 
 version = 1.0
 
-requirements = python3,kivy,reportlab
+requirements = python3,kivy
 
 orientation = portrait
 
+fullscreen = 0
+
 android.permissions = INTERNET
 
-android.api = 33
-android.minapi = 21
-android.ndk = 25b
-
-# 🔥 IMPORTANT FIX FOR AIDL + BUILD TOOLS
-android.enable_androidx = True
-android.gradle_dependencies =
+[buildozer]
+log_level = 2
+warn_on_root = 1
