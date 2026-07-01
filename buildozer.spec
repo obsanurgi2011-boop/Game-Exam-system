@@ -8,8 +8,7 @@ source.include_exts = py,kv,png,jpg,json
 
 version = 1.0
 
-requirements = python3,kivy
-
+requirements = python3,kivy,reportlab
 orientation = portrait
 
 [android]
