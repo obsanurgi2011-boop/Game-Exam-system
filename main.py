@@ -1,9 +1,8 @@
 from kivy.app import App
 from kivy.uix.label import Label
 
-class ExamApp(App):
+class Test(App):
     def build(self):
-        return Label(text="Exam System APK Working ✔")
+        return Label(text="APK Working")
 
-if __name__ == "__main__":
-    ExamApp().run()
+Test().run()
