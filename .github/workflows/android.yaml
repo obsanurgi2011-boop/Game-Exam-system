@@ -1,4 +1,4 @@
-name: Build Kivy APK
+name: Kivy APK Build
 
 on:
   workflow_dispatch:
@@ -16,12 +16,14 @@ jobs:
         with:
           python-version: "3.10"
 
-      - name: Install dependencies
+      - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            git zip unzip openjdk-17-jdk \
-            python3-pip build-essential \
+            git zip unzip \
+            openjdk-17-jdk \
+            python3-pip \
+            build-essential \
             libffi-dev libssl-dev
 
       - name: Install Buildozer
@@ -29,13 +31,17 @@ jobs:
           pip install --upgrade pip
           pip install buildozer cython
 
-      - name: Build APK with Buildozer
+      - name: Init Buildozer (if needed)
         run: |
-          buildozer init
-          buildozer -v android debug
+          if [ ! -f buildozer.spec ]; then
+            buildozer init
+          fi
+
+      - name: Build APK
+        run: buildozer android debug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: kivy-apk
+          name: apk
           path: bin/*.apk
