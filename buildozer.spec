@@ -17,7 +17,6 @@ fullscreen = 0
 
 android.permissions = INTERNET
 
-# (Important stable settings)
 android.api = 33
 android.minapi = 21
 android.ndk = 25b
