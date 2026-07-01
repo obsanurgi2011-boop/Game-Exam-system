@@ -3,11 +3,10 @@ title = Game Exam App
 package.name = gameexamapp
 package.domain = com.obsanurgi
 source.dir = .
-source.include_exts = py, png, jpg, kv, atlas, json
+source.include_exts = py,png,jpg,kv,atlas,json
 
 version = 0.1
-requirements = python3, kivy==2.3.0, reportlab, hostpython3, libffi
-
+requirements = python3, kivy==2.3.0, reportlab, libffi
 orientation = portrait
 fullscreen = 0
 
